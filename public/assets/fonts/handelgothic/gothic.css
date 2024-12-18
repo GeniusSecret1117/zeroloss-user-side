@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'HandelGothic'; /* Give your font a name */
+    src: url('./HANDGOTN.TTF') format('truetype'); /* Adjust the path based on where the file is located */
+    font-weight: bold; /* Use 'normal' or 'bold' based on the font weight */
+    font-style: normal; /* Use 'normal', 'italic', or 'oblique' */
+  }
