@@ -93,12 +93,14 @@ function ChangePassword(props) {
   const hasNumber = /\d/.test(validPassword);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(validPassword);
 
-  function onSubmit({ email, password }) { }
+  function onSubmit({ email, password }) { 
+    console.log('Form submitted with:', { email, password });
+  }
 
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  return (
+   return (
     <Root
       content={
         <div className="w-full container pt-[24px]">

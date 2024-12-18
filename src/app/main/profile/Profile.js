@@ -247,7 +247,7 @@ function Profile(props) {
                     &nbsp;ID:
                   </Typography>
                   <Typography className="text-[16px] font-semibold">
-                    778769435
+                    {profile.binanceId ?? ""}
                   </Typography>
                 </div>
               </div>
