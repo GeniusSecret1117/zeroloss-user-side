@@ -169,7 +169,7 @@ class JwtService extends FuseUtils.EventEmitter {
         })
         .catch((err) => {
           reject(err.message);
-        });
+        }); 
     });
   };
 

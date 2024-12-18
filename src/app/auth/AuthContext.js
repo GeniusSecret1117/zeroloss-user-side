@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import FuseSplashScreen from "@fuse/core/FuseSplashScreen";
 import { showMessage } from "app/store/fuse/messageSlice";
-import { logoutUser, setUser, updateProImg } from "app/store/userSlice";
+import { logoutUser, setUser, updateDispName, updateProImg } from "app/store/userSlice";
 import { getProfile, setProfile } from "app/store/profileSlice";
 import { getBinCred, setBinCred } from "app/store/binanceCredSlice";
 import {
@@ -34,7 +34,7 @@ function AuthProvider({ children }) {
         .then((user) => {
           success(user, "Signed in with JWT");
           dispatch(getProfile());
-          if (user.connected == true) {
+          if (user.connected === true) {
             dispatch(getBinCred());
             dispatch(getBinCap());
           }
@@ -89,6 +89,7 @@ function AuthProvider({ children }) {
     jwtService.on("onProfileUpdate", (profile) => {
       pass("Updated profile");
       dispatch(setProfile(profile));
+      dispatch(updateDispName(profile.fullName));
     });
 
     jwtService.on("onProImgUpdate", (photoUrl) => {
@@ -96,7 +97,7 @@ function AuthProvider({ children }) {
       dispatch(updateProImg(photoUrl));
     });
 
-    //Bin Service
+    // Bin Service
     binService.on("showMessage", (message) => {
       return dispatch(showMessage({ message }));
     });

@@ -225,6 +225,7 @@ function Profile(props) {
                     className="font-medium"
                     size="medium"
                     onClick={updateProImg}
+                    disabled={!profileImage}
                   >
                     Save
                   </Button>

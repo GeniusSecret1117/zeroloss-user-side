@@ -111,6 +111,9 @@ const userSlice = createSlice({
     updateProImg: (state, action) => {
       state.data.photoUrl = action.payload;
     },
+    updateDispName: (state, action) => {
+      state.data.displayName = action.payload;
+    },
   },
   extraReducers: {
     [updateUserSettings.fulfilled]: (state, action) => action.payload,
@@ -128,7 +131,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLoggedOut, updateProImg } = userSlice.actions;
+export const { userLoggedOut, updateProImg, updateDispName } = userSlice.actions;
 
 export const selectUser = ({ user }) => user;
 
