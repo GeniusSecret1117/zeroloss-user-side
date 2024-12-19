@@ -15,6 +15,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import * as yup from 'yup';
 import clsx from 'clsx';
+import jwtService from "../../auth/services/jwtService";
 
 const CheckIcon = () => {
   return (
@@ -45,7 +46,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 const schema = yup.object().shape({
-  email: yup.string().email('You must enter a valid email').required('You must enter a email'),
+  old_password: yup.string().required('Old password is required'),
   password: yup
     .string()
     .required('Please enter your password.')
@@ -59,18 +60,12 @@ const schema = yup.object().shape({
     .string()
     .oneOf([yup.ref('password'), null], 'Passwords must match.')
     .required('Please confirm your password.'),
-
-  robot: yup.boolean().oneOf([true], 'Please confirm you are not a robot.'),
-  terms: yup.boolean().oneOf([true], 'You must agree to the terms and conditions.'),
 });
 
 const defaultValues = {
-  email: '',
+  old_password: '',
   password: '',
   confirm_password: '',
-  referral: '',
-  robot: false,
-  terms: false,
 };
 
 function ChangePassword(props) {
@@ -93,13 +88,20 @@ function ChangePassword(props) {
   const hasNumber = /\d/.test(validPassword);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(validPassword);
 
-  function onSubmit({ email, password }) { 
-    console.log('Form submitted with:', { email, password });
+  function onSubmit(data) { 
+    jwtService
+      .changePassword(data)
+      .then((user) => {
+        // No need to do anything, user data will be set at app/auth/AuthContext
+      })
+      .catch((error) => {
+        console.log("error while signing up", error);
+      });
   }
 
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
    return (
     <Root
       content={
@@ -297,6 +299,7 @@ function ChangePassword(props) {
                   aria-label="Update"
                   type="submit"
                   size="large"
+                  disabled={!isValid}
                 >
                   Update Password
                 </Button>

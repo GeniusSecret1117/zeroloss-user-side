@@ -256,6 +256,25 @@ class JwtService extends FuseUtils.EventEmitter {
   getAccessToken = () => {
     return window.localStorage.getItem("jwt_access_token");
   };
+  changePassword = (data) => {
+    
+    
+    return new Promise((resolve, reject) => {
+      axios.post(jwtServiceConfig.changePd, data).then((response) => {
+        console.log(response);
+        
+        // if (response.data.data) {
+        //   this.setSession(response.data.access_token);
+        //   resolve(response.data.data);
+        //   const user = response.data.data;
+        //   user.loginRedirectUrl = "verify-code";
+        //   this.emit("onRegister", user);
+        // } else {
+        //   reject(response.message);
+        // }
+      });
+    });
+  };
 }
 
 const instance = new JwtService();

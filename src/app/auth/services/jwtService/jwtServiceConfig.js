@@ -1,6 +1,7 @@
 const jwtServiceConfig = {
   signIn: "api/auth/login",
   signUp: "api/auth/register",
+  changePd:"api/auth/change-password",
   verifyOtp: "api/auth/verify-otp",
   accessToken: "api/auth/access-token",
   updateProfile: "api/profile",
@@ -8,6 +9,7 @@ const jwtServiceConfig = {
   getProfile: "api/profile",
   getBinCred: "api/binance",
   updateBinCred: "api/binance",
+  
 };
 
 export default jwtServiceConfig;
