@@ -30,14 +30,31 @@ const PositionTab = () => {
   const balance = useSelector((state) => state.binCap.balance);
   const [pairCurrency, setPairCurrency] = useState("usdt");
   const [leverage, setLeverage] = useState(3);
+  const [profit, setProfit] = useState(1.5);
+  const [amount, setAmount] = useState(1000);
+  const [coinname, setCoinName] = useState(1000)
+  
 
   const handleChange = (event) => {
     setPairCurrency(event.target.value);
   };
+  const handleChangeCoinName = (event)=>{
+
+  }
 
   const handleChangeLeverage = (event) => {
     setLeverage(event.target.value);
   };
+  const handleChangeProfit = (event)=>{
+    setProfit(event.target.value);
+  }
+  const handleChangeAmount = (event)=>{
+    setAmount(event.target.value);
+  }
+  const buyOrder = () =>{
+        console.log('--:',pairCurrency,leverage,profit,amount);
+    
+  }
 
   return (
     <div className="mt-[20px] p-16 w-full">
@@ -88,7 +105,7 @@ const PositionTab = () => {
       <div className="w-full border border-[#DCE0DD] rounded-[16px] p-[12px] mt-[24px] grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 gap-16">
         <div>
           <HeaderTitle>Coin Name</HeaderTitle>
-          <OutlinedInput defaultValue="USDC" className="mt-[6px] w-full" />
+          <OutlinedInput defaultValue="USDC" className="mt-[6px] w-full" onChange={handleChangeCoinName}/>
         </div>
         <div>
           <HeaderTitle>Pair Currency</HeaderTitle>
@@ -105,11 +122,11 @@ const PositionTab = () => {
         </div>
         <div>
           <HeaderTitle>Order Amount</HeaderTitle>
-          <OutlinedInput defaultValue="10000" className="mt-[6px] w-full" />
+          <OutlinedInput defaultValue="10000" className="mt-[6px] w-full" onChange={handleChangeAmount} />
         </div>
         <div>
           <HeaderTitle>Take Profit %</HeaderTitle>
-          <OutlinedInput defaultValue="1.5" className="mt-[6px] w-full" />
+          <OutlinedInput  defaultValue="1.5" className="mt-[6px] w-full"  onChange={handleChangeProfit}/>
         </div>
         <div>
           <HeaderTitle>Leverage</HeaderTitle>
@@ -129,6 +146,7 @@ const PositionTab = () => {
             variant="contained"
             color="secondary"
             className="w-full font-medium"
+            onClick={buyOrder}
           >
             Buy/Long
           </Button>

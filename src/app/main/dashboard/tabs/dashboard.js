@@ -28,6 +28,7 @@ const DashboardTab = () => {
   if (profitData.length > 0) {
     todayProfit = profitData.find((item) => item.period === "1D")?.value || 0;
   }
+  
 
   return (
     <div className="mt-[20px] p-16">
