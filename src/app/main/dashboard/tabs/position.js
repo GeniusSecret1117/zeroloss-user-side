@@ -11,6 +11,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import PositionsTable from "../components/positionsTable";
+import binService from "../../../auth/services/binanceService/binService";
 
 const HeaderTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -32,14 +33,14 @@ const PositionTab = () => {
   const [leverage, setLeverage] = useState(3);
   const [profit, setProfit] = useState(1.5);
   const [amount, setAmount] = useState(1000);
-  const [coinname, setCoinName] = useState(1000)
+  const [coinname, setCoinName] = useState("usdc")
   
 
   const handleChange = (event) => {
     setPairCurrency(event.target.value);
   };
   const handleChangeCoinName = (event)=>{
-
+    setCoinName(event.target.value);
   }
 
   const handleChangeLeverage = (event) => {
@@ -52,8 +53,23 @@ const PositionTab = () => {
     setAmount(event.target.value);
   }
   const buyOrder = () =>{
-        console.log('--:',pairCurrency,leverage,profit,amount);
-    
+    const  data = 
+      {
+       coinName:coinname,
+       pairCurrency:pairCurrency,
+       orderAmount:amount,
+       leverage:leverage,
+       takeProfitPercent:profit,
+       side:"BUY"
+      };
+    binService
+      .buyOrder(data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log("error while signing up", error);
+      });
   }
 
   return (

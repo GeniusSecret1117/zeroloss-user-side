@@ -129,6 +129,29 @@ class BinService extends FuseUtils.EventEmitter {
   getAccessToken = () => {
     return window.localStorage.getItem("jwt_access_token");
   };
+  buyOrder = (data) =>{
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          binServiceConfig.buyOrder,
+          {data},
+          {
+            headers: {
+              Authorization: `Bearer ${this.getAccessToken()}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log('111:',response.data.data);
+          
+          resolve(response.data.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 }
 
 const instance = new BinService();
