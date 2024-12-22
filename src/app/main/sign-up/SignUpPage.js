@@ -110,17 +110,15 @@ function SignUpPage() {
       email,
       password,
     };
-
+   
     JwtService.createUser(data)
       .then((res) => {
-        console.log("inside ceate user", res);
-        console.log("inside ceate user 1", res.data.email);
         navigate("/verify-code", { state: { email: res.data.email } });
-        console.log("inside ceate user 2", res.data.email);
       })
       .catch((error) => {
         console.log("error", error);
       });
+      
   }
 
   const [showPassword, setShowPassword] = React.useState(false);

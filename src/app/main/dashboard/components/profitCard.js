@@ -21,7 +21,7 @@ const ProfitCard = (props) => {
           {formatNumber(value)}
         </Typography>
         <Typography color="primary" className="font-bold text-[10px]">
-          +{formatNumber(percentage)}%
+          +{percentage!==null?formatNumber(percentage):0}%
         </Typography>
       </div>
     </Paper>

@@ -162,6 +162,10 @@ const PositionHistoryTab = () => {
     setDtStart(undefined);
     setDtEnd(undefined);
   }
+  const getPsHistoryData = (value) =>{
+    const currentDay = new Date();
+    console.log(currentDay);    
+  }
 
   return (
     <div className="mt-[20px] p-16 w-full">
@@ -212,6 +216,7 @@ const PositionHistoryTab = () => {
                 disableRipple
                 key={key}
                 label={label}
+                onClick={() => getPsHistoryData(label)} 
               />
             ))}
           </Tabs>

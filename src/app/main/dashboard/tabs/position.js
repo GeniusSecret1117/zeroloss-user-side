@@ -29,11 +29,13 @@ const SellButton = styled(Button)(({ theme }) => ({
 
 const PositionTab = () => {
   const balance = useSelector((state) => state.binCap.balance);
-  const [pairCurrency, setPairCurrency] = useState("usdt");
+  const [pairCurrency, setPairCurrency] = useState("USDT");
   const [leverage, setLeverage] = useState(3);
   const [profit, setProfit] = useState(1.5);
   const [amount, setAmount] = useState(1000);
-  const [coinname, setCoinName] = useState("usdc")
+  const [coinname, setCoinName] = useState("USDC");
+  const [buy_btn_flag, setBuy_btn_flag] = useState(false);
+  const [sell_btn_flag, setSell_btn_flag] = useState(false);
   
 
   const handleChange = (event) => {
@@ -53,6 +55,7 @@ const PositionTab = () => {
     setAmount(event.target.value);
   }
   const buyOrder = () =>{
+    setBuy_btn_flag(true);
     const  data = 
       {
        coinName:coinname,
@@ -66,6 +69,28 @@ const PositionTab = () => {
       .buyOrder(data)
       .then((res) => {
         console.log(res);
+        setBuy_btn_flag(false);
+      })
+      .catch((error) => {
+        console.log("error while signing up", error);
+      });
+  }
+  const sellOrder = () =>{
+    const  data = 
+      {
+       coinName:coinname,
+       pairCurrency:pairCurrency,
+       orderAmount:amount,
+       leverage:leverage,
+       takeProfitPercent:profit,
+       side:"SELL"
+      };
+      setSell_btn_flag(true);
+    binService
+      .buyOrder(data)
+      .then((res) => {
+        console.log(res);
+        setSell_btn_flag(false);
       })
       .catch((error) => {
         console.log("error while signing up", error);
@@ -132,13 +157,13 @@ const PositionTab = () => {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
             >
-              <MenuItem value="usdt">USDT</MenuItem>
+              <MenuItem value="USDT">USDT</MenuItem>
             </Select>
           </FormControl>
         </div>
         <div>
           <HeaderTitle>Order Amount</HeaderTitle>
-          <OutlinedInput defaultValue="10000" className="mt-[6px] w-full" onChange={handleChangeAmount} />
+          <OutlinedInput defaultValue="110" className="mt-[6px] w-full" onChange={handleChangeAmount} />
         </div>
         <div>
           <HeaderTitle>Take Profit %</HeaderTitle>
@@ -163,12 +188,15 @@ const PositionTab = () => {
             color="secondary"
             className="w-full font-medium"
             onClick={buyOrder}
+            disabled={buy_btn_flag}
           >
             Buy/Long
           </Button>
           <SellButton
             variant="contained"
             className="w-full font-medium mt-[6px]"
+            onClick={sellOrder}
+            disabled={sell_btn_flag}
           >
             Sell/Short
           </SellButton>

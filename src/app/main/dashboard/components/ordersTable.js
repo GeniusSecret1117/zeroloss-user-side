@@ -105,7 +105,7 @@ const OrdersTable = () => {
                       <div
                         className={clsx(
                           "inline-flex min-w-[96px] justify-center items-center border rounded-[6px] p-[8px] ",
-                          item.side === "Buy"
+                          item.side !== "BUY"
                             ? "border-[#F9BAC6]  bg-[#F9BAC633] text-[#FF143E]"
                             : "border-[#C4F3D6]  bg-[#C4F3D633] text-[#41D87B]"
                         )}

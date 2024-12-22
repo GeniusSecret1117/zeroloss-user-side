@@ -142,14 +142,14 @@ const ProfitCarousel = (props) => {
 
 const ProfitCard = (props) => {
   const { userId, period, value, percentage, time } = props;
-  console.log("time ", time);
-  console.log(
-    "time ",
-    new Date(time).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-    }) || 0
-  );
+  // console.log("time ", time);
+  // console.log(
+  //   "time ",
+  //   new Date(time).toLocaleDateString("en-US", {
+  //     year: "numeric",
+  //     month: "short",
+  //   }) || 0
+  // );
   return (
     <Paper className="w-full items-center p-[12px] border border-[#C4F3D6] rounded-[12px] bg-[#083A3C] shadow-none ">
       <div className="flex justify-between">

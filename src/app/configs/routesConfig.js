@@ -21,6 +21,7 @@ import NotificationConfig from '../main/notification/NotificationConfig';
 import ChangePasswordConfig from '../main/change-password/ChangePasswordConfig';
 import SettingsConfig from '../main/settings/SettingsConfig';
 
+
 const routeConfigs = [
   DashboardConfig,
   MyReferralConfig,

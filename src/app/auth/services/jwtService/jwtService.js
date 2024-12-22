@@ -54,11 +54,11 @@ class JwtService extends FuseUtils.EventEmitter {
     return new Promise((resolve, reject) => {
       axios.post(jwtServiceConfig.signUp, data).then((response) => {
         if (response.data.data) {
-          this.setSession(response.data.access_token);
           resolve(response.data.data);
-          const user = response.data.data;
-          user.loginRedirectUrl = "verify-code";
-          this.emit("onRegister", user);
+          // this.setSession(response.data.access_token);
+          // const user = response.data.data;
+          // user.loginRedirectUrl = "verify-code";
+          // this.emit("onRegister", user);
         } else {
           reject(response.message);
         }
@@ -118,14 +118,16 @@ class JwtService extends FuseUtils.EventEmitter {
             resolve(response);
             this.emit("otp", "Email Verification Succeccfull");
           } else if (response.status == 500) {
-            reject(response.data.message);
             this.emit("otp", "Invalid OTP");
+            reject(response.data.message);
+            
           } else {
             reject(response.data.message);
-            this.emit("otp", "Invalid OTP");
+            this.emit("otp", response.data.message);
           }
         })
         .catch((error) => {
+          this.emit("otp", "Invalid OTP");
           reject(error.message || "An error occurred");
         });
     });
@@ -265,7 +267,7 @@ class JwtService extends FuseUtils.EventEmitter {
         //   this.setSession(response.data.access_token);
         //   resolve(response.data.data);
         //   const user = response.data.data;
-        //   user.loginRedirectUrl = "verify-code";
+          // user.loginRedirectUrl = "verify-code";
         //   this.emit("onRegister", user);
         // } else {
         //   reject(response.message);
@@ -273,6 +275,15 @@ class JwtService extends FuseUtils.EventEmitter {
       });
     });
   };
+  resendCode = (email,otp) =>{
+    
+    return new Promise((resolve, reject) => {
+      axios.post(jwtServiceConfig.resendCode, {email}).then((response) => {
+        this.emit("otp", "Resend verifycode successfuly");
+        console.log(response);
+      }).catch;
+    });
+  }
   
   
 }

@@ -155,7 +155,7 @@ function VerifyCodePage() {
     const otp = code.join("");
     JwtService.verifyUserOtp(otp, email)
       .then((res) => {
-        navigate("/profile");
+        navigate("/sign-in");
       })
       .catch((err) => {
         console.log("error votp", err);
@@ -165,6 +165,18 @@ function VerifyCodePage() {
   const navToProfile = () => {
     navigate("/profile");
   };
+  const cancelBtn = () =>{
+    navigate("/sign-up");
+  }
+  const resendCode = (email) =>{
+    JwtService.resendCode(email)
+      .then((res) => {
+        console.log(res);        
+      })
+      .catch((err) => {
+        console.log("error votp", err);
+      });
+  }
 
   return (
     <Root className="flex flex-col flex-auto items-center justify-center min-w-0">
@@ -232,7 +244,7 @@ function VerifyCodePage() {
               <Typography className="text-[16px] font-normal">
                 Didn’t get code?
               </Typography>
-              <Typography className="text-[14px] font-medium underline">
+              <Typography className="text-[14px] font-medium underline cursor-pointer"  onClick={() => resendCode(email)}>
                 Click to resend
               </Typography>
             </div>
@@ -241,6 +253,7 @@ function VerifyCodePage() {
                 variant="outlined"
                 className=" w-full font-medium text-[16px]"
                 aria-label="Cancel"
+                onClick={cancelBtn}
               >
                 Cancel
               </Button>

@@ -77,6 +77,7 @@ const Invites = (props) => {
         emailOptions.filter((email) => email.toLowerCase().includes(inputValue.toLowerCase()))
       );
     }
+      
   };
 
   return (
@@ -129,7 +130,7 @@ const Invites = (props) => {
           }}
           className="w-full"
         />
-        <SendIconButton aria-label="delete" size="small" className="">
+        <SendIconButton aria-label="delete" size="small" className="" onClick={handleKeyDown}>
           <SendOutlinedIcon sx={{ fontSize: 14 }} color="primary" />
         </SendIconButton>
       </div>
