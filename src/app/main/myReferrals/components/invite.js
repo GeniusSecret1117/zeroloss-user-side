@@ -14,14 +14,8 @@ import { FaFacebookF, FaLinkedin } from 'react-icons/fa6';
 import { AiFillInstagram } from 'react-icons/ai';
 
 import { RiTwitterXLine } from 'react-icons/ri';
-
-const emailOptions = [
-  'user1@example.com',
-  'user2@example.com',
-  'user3@example.com',
-  'user4@example.com',
-  'user5@example.com',
-];
+import JwtService from "src/app/auth/services/jwtService";
+import { fontSize } from '@mui/system';
 
 const SendIconButton = styled(IconButton)(({ theme }) => ({
   backgroundColor: '#BFDACD',
@@ -45,7 +39,8 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     border: 'none', // Disable border
     borderRadius: '24px',
-    height: '50px', // Set height of the container
+    fontSize:'20px',
+    height: '60px', // Set height of the container
     padding: '0px 5px',
     display: 'flex',
     alignItems: 'center', // Center the content vertically
@@ -64,22 +59,40 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const Invites = (props) => {
-  const [inputValue, setInputValue] = useState('');
-  const [filteredOptions, setFilteredOptions] = useState(emailOptions);
-
-  const handleInputChange = (event, newInputValue) => {
-    setInputValue(newInputValue);
+  const [emails, setEmails] = useState([]); // List of entered emails
+  const [currentEmail, setCurrentEmail] = useState(""); // Current input
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
+    return emailRegex.test(email.trim());
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      setFilteredOptions(
-        emailOptions.filter((email) => email.toLowerCase().includes(inputValue.toLowerCase()))
-      );
+   // Add email to the list if valid
+   const addEmail = () => {
+    if (isValidEmail(currentEmail)) {
+      setEmails([...emails, currentEmail.trim()]); // Trim and add the email
+      setCurrentEmail(""); // Clear the input
     }
-      
   };
-
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {      
+      inviteFrend();
+    }    
+    if (e.key === " " || e.key === ",") {
+      e.preventDefault(); // Prevent default spacebar or Enter behavior
+      addEmail(); // Add the email to the list
+    }
+  };
+  const inviteFrend =()=>{
+       if (emails.length>0) {
+        JwtService.inviteFriends(emails)        
+        .then((res) => {
+          setEmails([]);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+      }
+  }  
   return (
     <div className="col-span-6 px-[28px] py-[36px] rounded-[12px] bg-[#F3F9F7] flex flex-col justify-center">
       <Typography className="font-semibold text-[20px]" color="primary">
@@ -94,15 +107,16 @@ const Invites = (props) => {
       <div className="w-full flex border rounded-[24px] border-[#D0D7D3] items-center px-8 mt-[24px]">
         <Autocomplete
           multiple
-          limitTags={2}
+          limitTags={3}
           id="multiple-limit-tags"
-          options={filteredOptions}
+          options={emails}
           getOptionLabel={(option) => option}
-          defaultValue={[emailOptions[0], emailOptions[1]]}
+          value={emails}
+          onChange={(event, newValue) => setEmails(newValue)}
           renderInput={(params) => (
             <CustomTextField
               {...params}
-              onInput={handleInputChange}
+              onChange={(e)=>setCurrentEmail(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Email address"
               variant="outlined"
@@ -124,14 +138,22 @@ const Invites = (props) => {
             },
           }}
           ChipProps={{
+            onDelete: (event) => {
+              const deletedEmail = event.target.closest('.MuiChip-root').textContent.trim();
+              if (deletedEmail) {
+                const updatedEmails = emails.filter(email => email !== deletedEmail);
+                setEmails(updatedEmails); 
+              }
+            },
             sx: {
               backgroundColor: '#BFDACD99', // Set Chip background color
             },
           }}
           className="w-full"
+          
         />
         <SendIconButton aria-label="delete" size="small" className="" onClick={handleKeyDown}>
-          <SendOutlinedIcon sx={{ fontSize: 14 }} color="primary" />
+          <SendOutlinedIcon sx={{ fontSize: 17 }} color="primary" />
         </SendIconButton>
       </div>
       <Typography className="font-semibold text-[20px] mt-[24px]" color="primary">
@@ -147,7 +169,7 @@ const Invites = (props) => {
             className="flex flex-1 px-8"
             disableUnderline
             fullWidth
-            defaultValue="https://www.zeroloss.com/referral/1234567890"
+            defaultValue="https:///localhost:3000/sign-up?ref=127890"
             readOnly
           />
           <IconButton color="primary">

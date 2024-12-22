@@ -53,16 +53,26 @@ class JwtService extends FuseUtils.EventEmitter {
   createUser = (data) => {
     return new Promise((resolve, reject) => {
       axios.post(jwtServiceConfig.signUp, data).then((response) => {
-        if (response.data.data) {
-          resolve(response.data.data);
-          // this.setSession(response.data.access_token);
-          // const user = response.data.data;
-          // user.loginRedirectUrl = "verify-code";
-          // this.emit("onRegister", user);
-        } else {
-          reject(response.message);
-        }
-      });
+          if (response.data.data) {
+            resolve(response.data.data);
+            this.emit('otp', 'Success Sign up');
+          } else {
+            reject(response.message);
+          }
+        })
+        .catch((error, status) => {
+          if (error.response) {
+              const status = error.response.status;
+              const message = status === 409
+                  ? 'This email is already registered and verified.'
+                  : 'Error Sign up';
+              this.emit('otp', message);
+              throw new Error(message);
+          } else {
+              this.emit('otp', 'Unexpected error occurred.');
+              throw new Error('Unexpected error occurred.');
+          }
+        });
     });
   };
 
@@ -251,7 +261,6 @@ class JwtService extends FuseUtils.EventEmitter {
       console.warn("access token expired");
       return false;
     }
-
     return true;
   };
 
@@ -262,29 +271,36 @@ class JwtService extends FuseUtils.EventEmitter {
     return new Promise((resolve, reject) => {
       axios.post(jwtServiceConfig.changePd, data).then((response) => {
         console.log(response);
-        
-        // if (response.data.data) {
-        //   this.setSession(response.data.access_token);
-        //   resolve(response.data.data);
-        //   const user = response.data.data;
-          // user.loginRedirectUrl = "verify-code";
-        //   this.emit("onRegister", user);
-        // } else {
-        //   reject(response.message);
-        // }
       });
     });
   };
   resendCode = (email,otp) =>{
-    
     return new Promise((resolve, reject) => {
       axios.post(jwtServiceConfig.resendCode, {email}).then((response) => {
         this.emit("otp", "Resend verifycode successfuly");
         console.log(response);
+      }).catch((error) => {
+        this.emit("otp", "Invalid Resend OTP");
+      });
+    });
+  }
+  inviteFriends = (data) =>{
+    return new Promise((resolve, reject) => {
+      axios.post(jwtServiceConfig.inviteFrend, {data}).then((response) => {
+        this.emit("otp", "invite your friend successfuly!");
+        console.log(response);
+        resolve(response.data);
       }).catch;
     });
   }
-  
+  getReferral = () =>{
+    return new Promise((resolve, reject) => {
+      axios.get(jwtServiceConfig.getReferral).then((response) => {
+        resolve(response.data);
+      }).catch;
+    });
+    
+  }
   
 }
 

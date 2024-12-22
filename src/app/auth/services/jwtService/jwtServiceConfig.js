@@ -10,6 +10,9 @@ const jwtServiceConfig = {
   getBinCred: "api/binance",
   updateBinCred: "api/binance",
   resendCode :"api/auth/request-otp",
+  getReferral:"api/referral",
+  inviteFrend:"api/referral/invite",
+  
   
 };
 

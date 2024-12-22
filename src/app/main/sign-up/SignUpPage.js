@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import { AuthTextField } from "@fuse/core/Common/AuthTextField";
 import Typography from "@mui/material/Typography";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useSearchParams } from "react-router-dom";
 import * as yup from "yup";
 import _ from "@lodash";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
@@ -94,10 +94,15 @@ function SignUpPage() {
     defaultValues,
     resolver: yupResolver(schema),
   });
-
+  const [searchParams] = useSearchParams();
+  const referralCode = searchParams.get('ref');
+  
+  
   const { isValid, dirtyFields, errors } = formState;
   const [validPassword, setValidPassword] = useState("");
-
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [referredCodeBy,setReferredCodeBy] =React.useState(referralCode);
+  console.log("123123123:",referredCodeBy);
   // Validation checks
   const hasMinLength = validPassword.length >= 8;
   const hasUpperCase = /[A-Z]/.test(validPassword);
@@ -109,8 +114,8 @@ function SignUpPage() {
     const data = {
       email,
       password,
+      referredCodeBy
     };
-   
     JwtService.createUser(data)
       .then((res) => {
         navigate("/verify-code", { state: { email: res.data.email } });
@@ -118,10 +123,9 @@ function SignUpPage() {
       .catch((error) => {
         console.log("error", error);
       });
-      
   }
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -319,6 +323,11 @@ function SignUpPage() {
                     required
                     fullWidth
                     size="medium"
+                    value={referralCode}
+                    onChange={(e) => {
+                      setReferredCodeBy(e.target.value);
+                      field.onChange(e);
+                    }}
                   />
                 )}
               />

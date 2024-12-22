@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
@@ -31,6 +31,7 @@ import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { referraldata } from './tempdata';
+import JwtService from "src/app/auth/services/jwtService";
 
 const HeaderTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: '700', // Equivalent to 'font-semibold'
@@ -67,6 +68,17 @@ const ReferralsTable = () => {
     setStatus(event.target.value);
   };
 
+  useEffect(() => {
+    JwtService.getReferral()        
+        .then((res) => {
+          // setEmails([]);
+          console.log("asdff");
+          
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+  });
   const itemsPerPage = 25;
 
   // Calculate the current data to display based on the page
