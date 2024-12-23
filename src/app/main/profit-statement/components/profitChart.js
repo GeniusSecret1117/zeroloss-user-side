@@ -11,7 +11,7 @@ const ranges = ["7D", "14D", "1M", "3M", "1Y", "ALL"];
 const ProfitChart = (props) => {
   const [tabValue, setTabValue] = useState(0);
   const currentRange = Object.keys(ranges)[tabValue];
-
+  const {totalProfit} = props;
   const theme = useTheme();
 
   const series = [{
@@ -79,10 +79,10 @@ const ProfitChart = (props) => {
               $
             </Typography>
             <Typography className="font-Mint text-[16px] font-semibold" color="primary">
-              {formatNumberWithDecimal(2149350).integer}
+              {formatNumberWithDecimal(totalProfit).integer}
             </Typography>
             <Typography className="font-Mint text-[12px]" color="primary">
-              .{formatNumberWithDecimal(2149350).decimal}
+              .{formatNumberWithDecimal(totalProfit).decimal}
             </Typography>
           </div>
         </div>

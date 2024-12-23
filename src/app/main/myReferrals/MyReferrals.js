@@ -40,6 +40,8 @@ function MyReferrals(props) {
     JwtService.getReferral()        
         .then((res) => {
           setReferraldata(res);
+          console.log('123123123123',res);
+          
           const inactiveItems = res.filter(item => item.status === "Inactive");
           setTotalInactiveReferralNumber(inactiveItems.length);
           setTotalReferralNumber(res.length);

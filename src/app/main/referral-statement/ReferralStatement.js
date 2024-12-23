@@ -56,7 +56,17 @@ function ReferralStatement(props) {
 
   const [tabValue, setTabValue] = useState(0);
   const currentRange = Object.keys(ranges)[tabValue];
-
+  
+  // totalProfit
+  const profitData = useSelector((state) => state.binCap.incomeByRange) ?? [];
+  let totalProfit    = 0;
+  let clientProfit   = 0;
+  let zerolossProfit = 0;
+  if (profitData.length > 0) {
+    totalProfit    = profitData.find((item) => item.period === "ALL")?.value || 0;
+    clientProfit   = totalProfit * 0.5;
+    zerolossProfit =  clientProfit;
+  }
   const handleSearchText = (event) => {
     setSearchText(event.target.value);
   };
@@ -291,15 +301,15 @@ function ReferralStatement(props) {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-[24px]">
-            <TotalCard value={235010} />
-            <YourProfitCard value={23501} />
-            <ZeroLossProfitCard value={23501} />
+            <TotalCard value={totalProfit} />
+            <YourProfitCard value={clientProfit} />
+            <ZeroLossProfitCard value={zerolossProfit} />
           </div>
           <div className="mt-[24px]">
             <ReferralsTable />
           </div>
           <div className="mt-[24px]">
-            <ProfitChart />
+            <ProfitChart totalProfit={totalProfit}/>
           </div>
         </div>
       }
