@@ -79,10 +79,10 @@ const ProfitChart = (props) => {
               $
             </Typography>
             <Typography className="font-Mint text-[16px] font-semibold" color="primary">
-              {formatNumberWithDecimal(props.totalProfit).integer}
+              {/* {formatNumberWithDecimal(props.totalProfit).integer} */}
             </Typography>
             <Typography className="font-Mint text-[12px]" color="primary">
-              .{formatNumberWithDecimal(props.totalProfit).decimal}
+              {/* .{formatNumberWithDecimal(props.totalProfit).decimal} */}
             </Typography>
           </div>
         </div>

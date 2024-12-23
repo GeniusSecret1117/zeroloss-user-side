@@ -66,7 +66,7 @@ const PositionHistoryTable = () => {
                   <Typography className="font-medium text-[14px]">Closed</Typography>
                 </div>
               </BodyTableCell>
-              <BodyTableCell>
+              {/* <BodyTableCell>
                 <div className="flex flex-wrap gap-x-[48px] gap-y-[16px]">
                   <div className="flex flex-col gap-8">
                     <Typography className="font-medium text-[12px] text-[#697576]">Closing PNL</Typography>
@@ -97,7 +97,7 @@ const PositionHistoryTable = () => {
                     <EntryValue>08/09/2024 10:22:35</EntryValue>
                   </div>
                 </div>
-              </BodyTableCell>
+              </BodyTableCell> */}
             </TableRow>
           </TableBody>
         </Table>

@@ -86,7 +86,7 @@ const DashboardTab = () => {
       </div>
       <ProfitCarousel />
       <div className="mt-[32px] grid grid-cols-1 md:grid-cols-3 gap-[16px]">
-        <ProfitChart />
+        <ProfitChart todayProfit={todayProfit}/>
         <ProfitTable />
       </div>
     </div>

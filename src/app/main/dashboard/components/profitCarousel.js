@@ -17,7 +17,7 @@ import { RiDownloadLine } from "react-icons/ri";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import { useSelector } from "react-redux";
-import JwtService from "src/app/auth/services/jwtService";
+import BinService from "../../../../app/auth/services/binanceService/binService";
 
 const ShareIconButton = styled(IconButton)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.main,
@@ -81,27 +81,126 @@ const ProfitCarousel = (props) => {
   useSelector((state) => state.binCap.incomeByRange) || [];
 
   const [profitData,setProfitData] = useState([]);
+  const [dtStart,setDtStart] = useState(0);
+  const [dtEnd,setDtEnd] = useState(0);
+  const [dailyAveragesDatas, setDailyAveragesDatas] = useState([]);
 
 
   useEffect(() => {
-    getProfitData(start,end);
+    const startTime = new Date(new Date().getFullYear(), 0, 1).getTime();
+    const endTime = new Date().getTime();
+   
+     getProfitData(startTime,endTime);
   },[]);
 
-  const getProfitData = (start,end) =>{
-       
-    // JwtService.getProfitData()        
-    //     .then((res) => {
-    //       // setReferraldata(res);
-    //       // console.log(res);
-    //       // const inactiveItems = res.filter(item => item.status === "Inactive");
-    //       // setTotalInactiveReferralNumber(inactiveItems.length);
-    //       // setTotalReferralNumber(res.length);
-    //     })
-    //     .catch((error) => {
-    //       console.log("error", error);
-    //     });
-  }
+  const getProfitData = async (star ,end) =>{  
+    
+   
+    
+    const startTime = new Date(star).getTime();
+    const endTime = new Date(end).getTime();
 
+    console.log(">>>>>>>>>>>>>>",startTime ,endTime);
+    const dailyIncome = {};  // Initialize the object
+
+    await BinService.fetchProfitByPeriod(startTime, endTime)
+    .then((response) => {
+      console.log(response.profit);
+        const monthlyProfit = {};
+        response.profit.forEach(entry => {
+            const date = new Date(entry.time);
+            const monthYear = `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
+            const profit = parseFloat(entry.income);
+    
+            if (!monthlyProfit[monthYear]) {
+                monthlyProfit[monthYear] = 0;
+            }
+            monthlyProfit[monthYear] += profit;
+        });
+    
+        console.log('>>>>>>>>>>>>>>>>>',monthlyProfit);
+        
+        // Calculate average income for each day
+        // const dailyAverages = Object.entries(dailyIncome).map(([date, incomes]) => {
+        //     const total = incomes.reduce((sum, value) => sum + value, 0);
+        //     const average = total / incomes.length;
+        //     return { date, averageIncome: parseFloat(average.toFixed(8)) };
+        // });
+        // console.log("ksdksdkskksdkd",dailyAverages);
+        
+        // setDailyAveragesDatas(dailyAverages);
+    })
+    .catch((err) => {
+        console.error('Error fetching profit by period:', err);
+    });
+
+  }
+  const handleOnChange = (ranges) => {
+    const { selection } = ranges;
+    
+    if (selection.period > 0) {
+      setIsStartDate(true);
+      setDtStart(selection.startDate);
+      setDtEnd(selection.endDate);
+      return;
+    }
+
+    const currentDay = new Date();
+
+    if (
+      selection.startDate &&
+      selection.endDate &&
+      (selection.startDate.getTime() !== selection.endDate.getTime() ||
+        !isStartDate)
+    ) {
+      setDtStart(selection.startDate);
+      setDtEnd(selection.endDate);
+    } else {
+      setDtStart(selection.startDate);
+      setDtEnd(selection.endDate);
+    }
+    setIsStartDate((prev) => !prev);
+  };
+  const generatePastWeekDates = () => {
+    const dates = [];
+    const today = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(today.getDate() - i);
+      dates.push(date.toISOString().split('T')[0]);  // Format: YYYY-MM-DD
+    }
+    return dates;
+  };
+  
+  // Fill in missing days with empty placeholders
+  const fillMissingDays = (dailyAveragesDatas) => {
+    const pastWeekDates = generatePastWeekDates();
+    const filledData = pastWeekDates.map(date => {
+      const existing = dailyAveragesDatas.find(item => item.date === date);
+      return existing || { date, averageIncome: 0, percentage: 0 };  // Default empty data
+    });
+  
+    return filledData;
+  };
+  
+  // Fill data if necessary
+  const filledDailyData = fillMissingDays(dailyAveragesDatas);
+  
+  // Render ProfitCards for each day
+  const renderProfitCards = () => {
+    return filledDailyData.map((data, index) => (
+      <ProfitCard
+        key={index}
+        userId={userId}
+        period={data.date || "N/A"}
+        value={data.averageIncome || 0}
+        percentage={data.percentage || 0}
+        time={data.date || "N/A"}
+      />
+    ));
+  };
+  
 
   return (
     <div className="w-full mt-[32px]">
@@ -111,55 +210,7 @@ const ProfitCarousel = (props) => {
         renderButtonGroupOutside={true}
         customButtonGroup={<ButtonGroup />}
       >
-        <ProfitCard
-          userId={userId}
-          period={incomeByRange[0]?.period || "1D"}
-          value={incomeByRange[0]?.value || 0}
-          percentage={incomeByRange[0]?.percentage || 0}
-          time={incomeByRange[0]?.time || 0}
-        />
-        <ProfitCard
-          userId={userId}
-          period={incomeByRange[1]?.period || "7D"}
-          value={incomeByRange[1]?.value || 0}
-          percentage={incomeByRange[1]?.percentage || 0}
-          time={incomeByRange[1]?.time || 0}
-        />
-        <ProfitCard
-          userId={userId}
-          period={incomeByRange[2]?.period || "14D"}
-          value={incomeByRange[2]?.value || 0}
-          percentage={incomeByRange[2]?.percentage || 0}
-          time={incomeByRange[2]?.time || 0}
-        />
-        <ProfitCard
-          userId={userId}
-          period={incomeByRange[3]?.period || "1M"}
-          value={incomeByRange[3]?.value || 0}
-          percentage={incomeByRange[3]?.percentage || 0}
-          time={incomeByRange[3]?.time || 0}
-        />
-        <ProfitCard
-          userId={userId}
-          period={incomeByRange[4]?.period || "3M"}
-          value={incomeByRange[4]?.value || 0}
-          percentage={incomeByRange[4]?.percentage || 0}
-          time={incomeByRange[4]?.time || 0}
-        />
-        <ProfitCard
-          userId={userId}
-          period={incomeByRange[5]?.period || "1Y"}
-          value={incomeByRange[5]?.value || 0}
-          percentage={incomeByRange[5]?.percentage || 0}
-          time={incomeByRange[5]?.time || 0}
-        />
-        <ProfitCard
-          userId={userId}
-          period={incomeByRange?.period || "ALL"}
-          value={incomeByRange[6]?.value || 0}
-          percentage={incomeByRange[6]?.percentage || 0}
-          time={incomeByRange[6]?.time || 0}
-        />
+      {renderProfitCards()}
       </Carousel>
     </div>
   );
@@ -205,6 +256,7 @@ const ProfitCard = (props) => {
           {new Date(time).toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
+            day: "numeric",
           }) || 0}
         </Typography>
       </div>

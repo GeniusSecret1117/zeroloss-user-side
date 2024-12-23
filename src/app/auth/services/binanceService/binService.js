@@ -26,7 +26,55 @@ class BinService extends FuseUtils.EventEmitter {
         });
     });
   };
+  fetchProfitByPeriod = (startTime, endTime) => {
+    return new Promise((resolve, reject) => {
+      if (
+        !startTime ||
+        startTime == null ||
+        startTime == undefined ||
+        !endTime ||
+        endTime == null ||
+        endTime == undefined ||
+        isNaN(new Date(startTime)) ||
+        isNaN(new Date(endTime))
+      ) {
+        console.log("either of them are empty");
+        this.emit("showMessage", "Invalid Dates");
+        reject();
+        return;
+      }
 
+      if (new Date(startTime) >= new Date(endTime)) {
+        this.emit("showMessage", "Invalid Dates");
+        reject();
+        return;
+      }
+      
+      axios
+        .post(
+          binServiceConfig.fetchProfitByPeriod,
+          { startTime, endTime },
+          {
+            headers: {
+              Authorization: `Bearer ${this.getAccessToken()}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("getPeriod funding fee", response.data.data);
+          this.emit("updateFundingHistory", response.data.data);
+          resolve(response.data.data);
+        })
+        .catch((error) => {
+          this.emit(
+            "showMessage",
+            "Error while fetching Time based Funding. Please try again."
+          );
+          reject(error);
+        });
+    });
+  };
   getPeriodFundingHistory = (startTime, endTime) => {
     return new Promise((resolve, reject) => {
       if (

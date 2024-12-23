@@ -248,7 +248,7 @@ const ReferralsTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentData.map((item, index) => (
+              {/* {currentData.map((item, index) => (
                 <TableRow key={index}>
                   <BodyTableCell
                     className={clsx(index === currentData.length - 1 && 'border-none')}
@@ -284,7 +284,7 @@ const ReferralsTable = () => {
                     </div>
                   </BodyTableCell>
                 </TableRow>
-              ))}
+              ))} */}
             </TableBody>
           </Table>
         </TableContainer>

@@ -266,9 +266,9 @@ const PositionHistoryTab = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-24 mt-[42px]">
-        <NetProfitCard value={2350105.54} />
-        <GrossProfitCard value={2350105.54} />
-        <BinanceFeeCard value={2350105.54} />
+        <NetProfitCard value={0.00} />
+        <GrossProfitCard value={0.00} />
+        <BinanceFeeCard value={0.00} />
       </div>
       <div className="mt-[32px]">
         <PositionHistoryTable />
