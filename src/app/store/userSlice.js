@@ -99,6 +99,7 @@ const initialState = {
     photoUrl: "",
     email: "",
     shortcuts: ["", "", "", ""],
+    referralcode:'',
   },
   connected: null,
 };
@@ -123,6 +124,7 @@ const userSlice = createSlice({
       state.role = action.payload.role;
       state.data.displayName = action.payload.data.displayName;
       state.data.email = action.payload.data.email;
+      state.data.referralcode = action.payload.data.referral_code;
       state.data.photoUrl = action.payload.data.photoUrl;
       state.data.shortcuts = action.payload.data.shortcuts;
       state.data.connected = action.payload.connected;

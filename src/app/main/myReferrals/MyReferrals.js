@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { useTranslation } from 'react-i18next';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,6 +12,7 @@ import InactiveCard from './components/InactiveCard';
 import Referrals from './components/referrals';
 import Invites from './components/invite';
 import ReferralsTable from './components/referralsTable';
+import JwtService from "src/app/auth/services/jwtService";
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
   '& .FusePageSimple-header': {
@@ -29,6 +30,25 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function MyReferrals(props) {
   const { t } = useTranslation('myReferralsPage');
   const user = useSelector(selectUser);
+  
+  
+  const [referraldata,setReferraldata] = useState([]);
+  const [totalReferralNumber, setTotalReferralNumber] = useState(0);
+  const [inactiveReferralNumber, setTotalInactiveReferralNumber] = useState(0);
+
+  useEffect(() => {
+    JwtService.getReferral()        
+        .then((res) => {
+          setReferraldata(res);
+          const inactiveItems = res.filter(item => item.status === "Inactive");
+          setTotalInactiveReferralNumber(inactiveItems.length);
+          setTotalReferralNumber(res.length);
+          
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+  }, []);
 
   return (
     <Root
@@ -41,13 +61,13 @@ function MyReferrals(props) {
             </Typography>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-[12px]">
-            <TotalCard value={235010} />
-            <ActiveCard value={23501} />
-            <InactiveCard value={23501} />
+            <TotalCard value={totalReferralNumber} />
+            <ActiveCard value={totalReferralNumber-inactiveReferralNumber} />
+            <InactiveCard value={inactiveReferralNumber} />
           </div>
           <div className="mt-[32px] grid grid-cols-1 md:grid-cols-10 gap-[16px]">
             <Referrals />
-            <Invites />
+            <Invites referralcode={user.data.referralcode}/>
           </div>
           <div className="mt-[24px]">
             <ReferralsTable />

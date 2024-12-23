@@ -296,7 +296,7 @@ class JwtService extends FuseUtils.EventEmitter {
   getReferral = () =>{
     return new Promise((resolve, reject) => {
       axios.get(jwtServiceConfig.getReferral).then((response) => {
-        resolve(response.data);
+        resolve(response.data.data[0]);
       }).catch;
     });
     

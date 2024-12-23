@@ -30,7 +30,7 @@ import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlin
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
 import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
-import { referraldata } from './tempdata';
+// import { referraldata } from './tempdata';
 import JwtService from "src/app/auth/services/jwtService";
 
 const HeaderTableCell = styled(TableCell)(({ theme }) => ({
@@ -61,8 +61,10 @@ const ReferralsTable = () => {
   // State to track the current page
   const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState('');
-
   const [status, setStatus] = useState('all');
+  const [referraldata,setReferraldata] = useState([]);
+
+  
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
@@ -71,14 +73,17 @@ const ReferralsTable = () => {
   useEffect(() => {
     JwtService.getReferral()        
         .then((res) => {
-          // setEmails([]);
-          console.log("asdff");
+          setReferraldata(res);
+          console.log(res);
+          const inactiveItems = res.filter(item => item.status === "Inactive");
+          setTotalInactiveReferralNumber(inactiveItems.length);
+          setTotalReferralNumber(res.length);
           
         })
         .catch((error) => {
           console.log("error", error);
         });
-  });
+  },[]);
   const itemsPerPage = 25;
 
   // Calculate the current data to display based on the page
@@ -246,30 +251,30 @@ const ReferralsTable = () => {
                   <BodyTableCell
                     className={clsx(index === currentData.length - 1 && 'border-none')}
                   >
-                    <Typography className="small">{item.date}</Typography>
+                    <Typography className="small">{item.updated_at}</Typography>
                   </BodyTableCell>
                   <BodyTableCell
                     className={clsx(index === currentData.length - 1 && 'border-none')}
                   >
-                    <Typography className="small">{item.name}</Typography>
+                    <Typography className="small">{item.full_name}</Typography>
                   </BodyTableCell>
                   <BodyTableCell
                     className={clsx(index === currentData.length - 1 && 'border-none')}
                   >
-                    <Typography className="small">{item.email}</Typography>
+                    <Typography className="small">{item.invite_email}</Typography>
                   </BodyTableCell>
                   <BodyTableCell
                     align="center"
                     className={clsx(index === currentData.length - 1 && 'border-none')}
                   >
-                    <Typography>{item.phone}</Typography>
+                    <Typography>{item.whatsapp}</Typography>
                   </BodyTableCell>
                   <BodyTableCell
                     align="right"
                     className={clsx(index === currentData.length - 1 && 'border-none')}
                   >
-                    <Typography className="font-Mint">
-                      {formatNumber(item.invest_amount)}
+                    <Typography className="font-Mint">{0}
+                      {/* {formatNumber(item.invest_amount)?formatNumber(item.invest_amount):0} */}
                     </Typography>
                   </BodyTableCell>
                   <BodyTableCell
@@ -300,11 +305,11 @@ const ReferralsTable = () => {
                       ) : (
                         <>
                           <HighlightOffOutlinedIcon sx={{ fontSize: 20, color: '#FE2B51' }} />
-                          <div className="font-medium text-[#FE2B51]">{item.invest_status}</div>
+                          <div className="font-medium text-[#FE2B51]">{item.invest_status?item.invest_status:'No'}</div>
                         </>
                       )}
                     </div>
-                  </BodyTableCell>
+                  </BodyTableCell> 
                 </TableRow>
               ))}
             </TableBody>

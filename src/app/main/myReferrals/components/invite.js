@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -59,12 +59,17 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const Invites = (props) => {
+  console.log('333:',props);
+
   const [emails, setEmails] = useState([]); // List of entered emails
   const [currentEmail, setCurrentEmail] = useState(""); // Current input
+ 
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
     return emailRegex.test(email.trim());
   };
+
+
 
    // Add email to the list if valid
    const addEmail = () => {
@@ -169,7 +174,7 @@ const Invites = (props) => {
             className="flex flex-1 px-8"
             disableUnderline
             fullWidth
-            defaultValue="https:///localhost:3000/sign-up?ref=127890"
+            defaultValue={`https://157.173.221.60/sign-up?ref=${props.referralcode}`}
             readOnly
           />
           <IconButton color="primary">

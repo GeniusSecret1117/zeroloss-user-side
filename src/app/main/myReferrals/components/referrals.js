@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import Typography from '@mui/material/Typography';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -8,7 +8,10 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 
+
+
 const Referrals = (props) => {
+  
   return (
     <div className="col-span-4 px-[24px] py-[12px] rounded-[12px] bg-[#F3F9F7]">
       <Typography className="font-semibold text-[42px]" color="primary">
