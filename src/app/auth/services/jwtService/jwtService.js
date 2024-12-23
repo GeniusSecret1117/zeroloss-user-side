@@ -301,7 +301,14 @@ class JwtService extends FuseUtils.EventEmitter {
     });
     
   }
-  
+  getProfitData = () =>{
+    return new Promise((resolve, reject) => {
+      axios.post(jwtServiceConfig.getReferral,{startTime,endTime}).then((response) => {
+        resolve(response.data.data[0]);
+      }).catch;
+    });
+    
+  }
 }
 
 const instance = new JwtService();

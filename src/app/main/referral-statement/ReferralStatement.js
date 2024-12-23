@@ -306,10 +306,10 @@ function ReferralStatement(props) {
             <ZeroLossProfitCard value={zerolossProfit} />
           </div>
           <div className="mt-[24px]">
-            <ReferralsTable />
+            <ReferralsTable totalProfit={totalProfit}/>
           </div>
           <div className="mt-[24px]">
-            <ProfitChart totalProfit={totalProfit}/>
+            <ProfitChart />
           </div>
         </div>
       }

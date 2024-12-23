@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -17,6 +17,7 @@ import { RiDownloadLine } from "react-icons/ri";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import { useSelector } from "react-redux";
+import JwtService from "src/app/auth/services/jwtService";
 
 const ShareIconButton = styled(IconButton)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.main,
@@ -77,7 +78,31 @@ const ButtonGroup = ({ next, previous, goToSlide, ...rest }) => {
 const ProfitCarousel = (props) => {
   const userId = useSelector((state) => state.user.userId);
   const incomeByRange =
-    useSelector((state) => state.binCap.incomeByRange) || [];
+  useSelector((state) => state.binCap.incomeByRange) || [];
+
+  const [profitData,setProfitData] = useState([]);
+
+
+  useEffect(() => {
+    getProfitData(start,end);
+  },[]);
+
+  const getProfitData = (start,end) =>{
+       
+    // JwtService.getProfitData()        
+    //     .then((res) => {
+    //       // setReferraldata(res);
+    //       // console.log(res);
+    //       // const inactiveItems = res.filter(item => item.status === "Inactive");
+    //       // setTotalInactiveReferralNumber(inactiveItems.length);
+    //       // setTotalReferralNumber(res.length);
+    //     })
+    //     .catch((error) => {
+    //       console.log("error", error);
+    //     });
+  }
+
+
   return (
     <div className="w-full mt-[32px]">
       <Carousel
